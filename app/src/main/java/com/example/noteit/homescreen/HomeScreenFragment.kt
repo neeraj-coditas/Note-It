@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteit.databinding.FragmentHomeScreenBinding
@@ -12,13 +14,8 @@ import com.example.noteit.homescreen.adapter.HomeScreenRecyclerAdapter
 import com.example.noteit.homescreen.viewmodel.HomeScreenViewModel
 
 class HomeScreenFragment : Fragment() {
-    private lateinit var vm : HomeScreenViewModel
+    private val vm : HomeScreenViewModel by activityViewModels()
     private lateinit var binding : FragmentHomeScreenBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        vm = ViewModelProvider(requireActivity())[HomeScreenViewModel::class.java]
-    }
 
     // Inflate the layout for this fragment
     override fun onCreateView(
@@ -38,8 +35,16 @@ class HomeScreenFragment : Fragment() {
             binding.fragmentHomeTvCreateNote.visibility = View.GONE
 
             binding.notesList.layoutManager = LinearLayoutManager(requireContext())
-            val myList = vm.notesObjects
-            binding.notesList.adapter = HomeScreenRecyclerAdapter(myList)
+            binding.notesList.adapter = HomeScreenRecyclerAdapter(vm.notesObjects)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
     }
 }

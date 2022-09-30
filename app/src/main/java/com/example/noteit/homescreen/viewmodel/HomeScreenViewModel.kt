@@ -1,31 +1,30 @@
 package com.example.noteit.homescreen.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.noteit.data.NotesDataClass
+import com.example.noteit.data.Note
 
 class HomeScreenViewModel : ViewModel(){
 
-    val notesObjects = mutableListOf<NotesDataClass>()
+    val notesObjects = mutableListOf<Note>()
 
     init {
-        TODO("Dummy Data to be deleted later")
-        notesObjects.add(NotesDataClass("Reading List"))
-        notesObjects.add(NotesDataClass("TO DO"))
-        notesObjects.add(NotesDataClass("Shopping List"))
-        notesObjects.add(NotesDataClass("Grocery List"))
-        notesObjects.add(NotesDataClass("Recipe List"))
-        notesObjects.add(NotesDataClass("Workout List"))
-        notesObjects.add(NotesDataClass("Songs List"))
-        notesObjects.add(NotesDataClass("Movie List"))
-        notesObjects.add(NotesDataClass("Cafe List"))
-        notesObjects.add(NotesDataClass("Restaurants List"))
-        notesObjects.add(NotesDataClass("Cricket Teams List"))
-        notesObjects.add(NotesDataClass("Football Teams List"))
-        notesObjects.add(NotesDataClass("Football Teams List"))
-        notesObjects.add(NotesDataClass("Football Teams List"))
-        notesObjects.add(NotesDataClass("Football Teams List"))
-        notesObjects.add(NotesDataClass("Football Teams List"))
-        notesObjects.add(NotesDataClass("Football Teams List"))
-        notesObjects.add(NotesDataClass("Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List"))
+        notesObjects.add(Note("Reading List"))
+        notesObjects.add(Note("TO DO"))
+        notesObjects.add(Note("Shopping List"))
+        notesObjects.add(Note("Grocery List"))
+        notesObjects.add(Note("Recipe List"))
+        notesObjects.add(Note("Workout List"))
+        notesObjects.add(Note("Songs List"))
+        notesObjects.add(Note("Movie List"))
+        notesObjects.add(Note("Cafe List"))
+        notesObjects.add(Note("Restaurants List"))
+        notesObjects.add(Note("Cricket Teams List"))
+        notesObjects.add(Note("Football Teams List"))
+        notesObjects.add(Note("Football Teams List"))
+        notesObjects.add(Note("Football Teams List"))
+        notesObjects.add(Note("Football Teams List"))
+        notesObjects.add(Note("Football Teams List"))
+        notesObjects.add(Note("Football Teams List"))
+        notesObjects.add(Note("Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List"))
     }
 }

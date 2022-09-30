@@ -1,32 +1,31 @@
 package com.example.noteit.homescreen.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.noteit.R
-import com.example.noteit.data.NotesDataClass
+import com.example.noteit.data.Note
+import com.example.noteit.databinding.SingleNoteViewBinding
 
-class HomeScreenRecyclerAdapter(val notes: List<NotesDataClass>):RecyclerView.Adapter<HomeScreenRecyclerAdapter.NotesViewHolder>() {
+class HomeScreenRecyclerAdapter(private val notes: List<Note>):RecyclerView.Adapter<HomeScreenRecyclerAdapter.NotesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.item_note,parent,false)
-        return NotesViewHolder(view)
+        val binding = SingleNoteViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return NotesViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        var myList = notes[position]
-        holder.textTitle.text = myList.title
+        val myList = notes[position]
+        holder.bind(myList)
     }
 
     override fun getItemCount(): Int {
         return notes.size
     }
 
-    class NotesViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        var textTitle = itemView.findViewById<TextView>(R.id.text_item_title)
+    class NotesViewHolder(val binding: SingleNoteViewBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(view: Note){
+            binding.notesDataClass = view
+        }
     }
 
 }
