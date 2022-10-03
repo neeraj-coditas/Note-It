@@ -4,32 +4,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashScreenFragment"
-    android:background="@color/black_1">
+    tools:context=".splashscreen.SplashScreenFragment"
+    android:background="@color/lighter_black">
 
-    <ImageView
-        android:id="@+id/fragment_splash_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/fragment_splash_iv_app_icon"
+        android:layout_width="@dimen/dp_115"
+        android:layout_height="@dimen/dp_115"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fragment_splash_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:src="@drawable/ic_splash_logo"
-        android:layout_marginTop="150dp"
+        android:src="@mipmap/ic_splash_logo"
+
         />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/fragment_splash_tv"
+        android:id="@+id/fragment_splash_tv_app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/note_it"
         android:textColor="@color/white"
         android:textSize="40sp"
-        app:layout_constraintTop_toBottomOf="@id/fragment_splash_iv"
+        app:layout_constraintTop_toBottomOf="@id/fragment_splash_iv_app_icon"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
