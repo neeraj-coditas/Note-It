@@ -1,12 +1,17 @@
 package com.example.noteit.homescreen.adapter
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.example.noteit.data.Note
 import com.example.noteit.databinding.SingleNoteViewBinding
+import com.example.noteit.model.Note
 
-class HomeScreenRecyclerAdapter(private val notes: List<Note>):RecyclerView.Adapter<HomeScreenRecyclerAdapter.NotesViewHolder>() {
+class HomeScreenRecyclerAdapter() : RecyclerView.Adapter<HomeScreenRecyclerAdapter.NotesViewHolder>() {
+
+    val allNotes = ArrayList<Note>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val binding = SingleNoteViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
@@ -14,12 +19,19 @@ class HomeScreenRecyclerAdapter(private val notes: List<Note>):RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        val myList = notes[position]
-        holder.bind(myList)
+        val currentNote = allNotes[position]
+        holder.bind(currentNote)
+    }
+
+    fun updateList(newList : List<Note>){
+        allNotes.clear()
+        allNotes.addAll(newList)
+        Log.d("ListCheckAtAdapter",newList.toString())
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
-        return notes.size
+        return allNotes.size
     }
 
     class NotesViewHolder(val binding: SingleNoteViewBinding) : RecyclerView.ViewHolder(binding.root){

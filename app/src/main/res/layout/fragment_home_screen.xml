@@ -87,9 +87,9 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notesList"
+        android:id="@+id/fragment_home_screen_rv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="143dp"
         tools:listitem="@layout/single_note_view"
         app:layout_constraintBottom_toBottomOf="parent"
