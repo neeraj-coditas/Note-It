@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="notesDataClass"
-            type="com.example.noteit.data.Note" />
+            type="com.example.noteit.model.Note" />
 
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/item_note_shape"
+        android:background="@drawable/single_note_shape"
         android:layout_marginEnd="@dimen/dp_25"
         android:layout_marginStart="@dimen/dp_24"
         android:layout_marginBottom="@dimen/dp_25"
@@ -22,6 +23,7 @@
             android:id="@+id/view_unit_tv_title"
             android:text="@{notesDataClass.title}"
             style="@style/TextAppearance.AppCompat.Headline"
+            tools:text = "Note 1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"

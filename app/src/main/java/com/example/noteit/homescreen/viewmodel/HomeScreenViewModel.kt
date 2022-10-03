@@ -1,30 +1,32 @@
 package com.example.noteit.homescreen.viewmodel
 
-import androidx.lifecycle.ViewModel
-import com.example.noteit.data.Note
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.example.noteit.model.Note
+import com.example.noteit.model.NoteDao
+import com.example.noteit.model.NoteDatabase
+import com.example.noteit.model.NoteRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class HomeScreenViewModel : ViewModel(){
+class HomeScreenViewModel(application: Application) : AndroidViewModel(application){
 
-    val notesObjects = mutableListOf<Note>()
+    val dao = NoteDatabase.getDatabase(application).getNoteDao()
+    val repository = NoteRepository(dao)
+    val allNotes: LiveData<List<Note>> = repository.allNotes
 
-    init {
-        notesObjects.add(Note("Reading List"))
-        notesObjects.add(Note("TO DO"))
-        notesObjects.add(Note("Shopping List"))
-        notesObjects.add(Note("Grocery List"))
-        notesObjects.add(Note("Recipe List"))
-        notesObjects.add(Note("Workout List"))
-        notesObjects.add(Note("Songs List"))
-        notesObjects.add(Note("Movie List"))
-        notesObjects.add(Note("Cafe List"))
-        notesObjects.add(Note("Restaurants List"))
-        notesObjects.add(Note("Cricket Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List"))
+    /*init{
+        allNotes = repository.allNotes
+    }*/
+
+    fun insertNote() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insert(Note("Neeraj"))
+        }
     }
+
 }
