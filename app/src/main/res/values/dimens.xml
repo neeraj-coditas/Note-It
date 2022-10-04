@@ -26,6 +26,10 @@
     <dimen name="dp_25">25dp</dimen>
     <dimen name="dp_46">46dp</dimen>
     <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_141">141dp</dimen>
     <dimen name="dp_12.5">12.5dp</dimen>
-
+    <dimen name="dp_233">233dp</dimen>
+    <dimen name="sp_48">48sp</dimen>
+    <dimen name="sp_23">23sp</dimen>
+    <dimen name="dp_96">96dp</dimen>
 </resources>

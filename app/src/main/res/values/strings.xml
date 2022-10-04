@@ -9,4 +9,6 @@
     <string name="provide_app_info">Provide App Info</string>
     <string name="empty_home_image">Empty Home Image</string>
     <string name="create_your_first_note">Create your first note !</string>
+    <string name="title">Title</string>
+    <string name="type_something">Type Something...</string>
 </resources>

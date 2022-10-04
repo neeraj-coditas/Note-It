@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteit.databinding.FragmentHomeScreenBinding
 import com.example.noteit.homescreen.adapter.HomeScreenRecyclerAdapter
@@ -25,11 +26,16 @@ class HomeScreenFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeScreenBinding.inflate(layoutInflater)
-        viewModel.insertNote()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.fragmentHomeScreenRv.layoutManager = LinearLayoutManager(requireContext())
         binding.fragmentHomeScreenRv.adapter = notesAdapter
 
+        viewModel.insertNote()
         viewModel.allNotes.observe(requireActivity()) {
             if (it.isNotEmpty()) {
                 binding.fragmentHomeIv.visibility = View.GONE
@@ -37,6 +43,10 @@ class HomeScreenFragment : Fragment() {
                 notesAdapter.updateList(it)
             }
         }
-        return binding.root
+
+        binding.fragmentHomeFabBtn.setOnClickListener{
+            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment())
+        }
+
     }
 }
