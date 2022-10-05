@@ -35,11 +35,10 @@ class HomeScreenFragment : Fragment() {
         binding.fragmentHomeScreenRv.layoutManager = LinearLayoutManager(requireContext())
         binding.fragmentHomeScreenRv.adapter = notesAdapter
 
-        viewModel.insertNote()
         viewModel.allNotes.observe(requireActivity()) {
             if (it.isNotEmpty()) {
                 binding.fragmentHomeIv.visibility = View.GONE
-                binding.fragmentHomeTvCreateNote.visibility = View.GONE
+                binding.fragmentHomeTextCreateNote.visibility = View.GONE
                 notesAdapter.updateList(it)
             }
         }

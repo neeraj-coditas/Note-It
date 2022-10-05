@@ -23,9 +23,9 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         allNotes = repository.allNotes
     }*/
 
-    fun insertNote() {
+    fun insertNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insert(Note("Neeraj"))
+            repository.insert(note)
         }
     }
 

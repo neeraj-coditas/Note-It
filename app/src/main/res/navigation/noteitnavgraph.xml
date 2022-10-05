@@ -2,7 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/noteitnavgraph"
     app:startDestination="@id/splashScreenFragment">
 
     <fragment
@@ -32,5 +31,18 @@
         android:id="@+id/editorScreenFragment"
         android:name="com.example.noteit.editorscreen.EditorScreenFragment"
         android:label="fragment_editor_screen"
-        tools:layout="@layout/fragment_editor_screen" />
+        tools:layout="@layout/fragment_editor_screen" >
+        <action
+            android:id="@+id/action_editorScreenFragment_to_saveDialogFragment"
+            app:destination="@id/customDialogFragment" />
+        <action
+            android:id="@+id/action_editorScreenFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/editorScreenFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <dialog
+        android:id="@+id/customDialogFragment"
+        android:name="com.example.noteit.editorscreen.customdialogfragment.CustomDialogFragment"
+        android:label="SaveDialogFragment" />
 </navigation>
