@@ -1,30 +1,37 @@
 package com.example.noteit.homescreen.viewmodel
 
-import androidx.lifecycle.ViewModel
-import com.example.noteit.data.Note
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.example.noteit.model.Note
+import com.example.noteit.model.NoteDatabase
+import com.example.noteit.model.NoteRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class HomeScreenViewModel : ViewModel(){
+class HomeScreenViewModel(application: Application) : AndroidViewModel(application){
 
-    val notesObjects = mutableListOf<Note>()
+    private val dao = NoteDatabase.getDatabase(application).getNoteDao()
+    private val noteRepository = NoteRepository(dao)
+    val allNotes: LiveData<List<Note>> = noteRepository.allNotes
 
-    init {
-        notesObjects.add(Note("Reading List"))
-        notesObjects.add(Note("TO DO"))
-        notesObjects.add(Note("Shopping List"))
-        notesObjects.add(Note("Grocery List"))
-        notesObjects.add(Note("Recipe List"))
-        notesObjects.add(Note("Workout List"))
-        notesObjects.add(Note("Songs List"))
-        notesObjects.add(Note("Movie List"))
-        notesObjects.add(Note("Cafe List"))
-        notesObjects.add(Note("Restaurants List"))
-        notesObjects.add(Note("Cricket Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List"))
-        notesObjects.add(Note("Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List Football Teams List"))
+    fun insertNote(note: Note) {
+        viewModelScope.launch(Dispatchers.IO) {
+            noteRepository.insert(note)
+        }
     }
+
+    fun deleteNote(note:Note){
+        viewModelScope.launch(Dispatchers.IO) {
+            noteRepository.delete(note)
+        }
+    }
+
+    fun updateNote(note:Note){
+        viewModelScope.launch(Dispatchers.IO) {
+            noteRepository.update(note)
+        }
+    }
+
 }
