@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.Person.fromBundle
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.noteit.databinding.FragmentEditorScreenBinding
@@ -29,16 +30,15 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        prepareNoteForEditing()
+
         binding.fragmentEditorBtnSave.setOnClickListener {
             saveNote()
         }
         binding.fragmentEditorBtnBack.setOnClickListener {
             discardNote()
         }
-
         dialogInstance = CustomDialogFragment()
-
-
     }
 
     private fun showDialog() {
@@ -50,6 +50,20 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
     private fun saveNote() {
         dialogInstance.createInstance("Save Note ?", "Save", "Discard")
         showDialog()
+
+    }
+
+    override fun onSaveNote() {
+        val noteTitle = binding.fragmentEditorTextTitle.text.toString()
+        val noteDescription = binding.fragmentEditorTextDescription.text.toString()
+        if (noteTitle.isNotEmpty() ) {
+            viewModel.insertNote(Note(noteTitle, noteDescription))
+            Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
+            dialogInstance.dismiss()
+        } else {
+            Toast.makeText(context, "Please Enter a Title", Toast.LENGTH_SHORT).show()
+            dialogInstance.dismiss()
+        }
     }
 
     private fun discardNote() {
@@ -65,25 +79,21 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
         }
     }
 
-    override fun onSaveNote() {
-        val noteTitle = binding.fragmentEditorTextTitle.text.toString()
-        val noteDescription = binding.fragmentEditorTextDescription.text.toString()
-        if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty()) {
-            viewModel.insertNote(Note(noteTitle, noteDescription))
-            Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
-            dialogInstance.dismiss()
-        } else {
-            Toast.makeText(context, "Please Create a Note", Toast.LENGTH_SHORT).show()
-            dialogInstance.dismiss()
-        }
+    override fun onDiscardNote() {
+        findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
     }
 
     override fun onCancelDialog() {
         dialogInstance.dismiss()
     }
 
-    override fun onDiscardNote() {
-        findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
+    private fun prepareNoteForEditing() {
+        arguments?.let {
+            val safeArgs = EditorScreenFragmentArgs.fromBundle(it)
+            val note = safeArgs.note
+            binding.fragmentEditorTextTitle.setText(note.title.toString())
+            binding.fragmentEditorTextDescription.setText(note.description.toString())
+        }
     }
 
 }

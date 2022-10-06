@@ -11,15 +11,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteit.databinding.FragmentHomeScreenBinding
 import com.example.noteit.homescreen.adapter.HomeScreenRecyclerAdapter
 import com.example.noteit.homescreen.viewmodel.HomeScreenViewModel
+import com.example.noteit.model.Note
 
-class HomeScreenFragment : Fragment() {
+class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
     private val viewModel: HomeScreenViewModel by activityViewModels()
     private lateinit var binding: FragmentHomeScreenBinding
-    private val notesAdapter = HomeScreenRecyclerAdapter()
+    private val notesAdapter = HomeScreenRecyclerAdapter(this)
 
     // Inflate the layout for this fragment
     override fun onCreateView(
@@ -41,11 +44,29 @@ class HomeScreenFragment : Fragment() {
                 binding.fragmentHomeTextCreateNote.visibility = View.GONE
                 notesAdapter.updateList(it)
             }
+            else{
+                notesAdapter.updateList(it)
+                binding.fragmentHomeIv.visibility = View.VISIBLE
+                binding.fragmentHomeTextCreateNote.visibility = View.VISIBLE
+            }
+
         }
 
         binding.fragmentHomeFabBtn.setOnClickListener{
-            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment())
+            val emptyList = Note("","")
+            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(
+                emptyList))
         }
 
+    }
+
+    override fun onItemSelected(position: Int, item: Note) {
+        val navDirection = HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(item)
+        Log.d("CheckID",item.id.toString())
+        findNavController().navigate(navDirection)
+    }
+
+    override fun onItemLongClicked(position: Int, item: Note) {
+        viewModel.deleteNote(item)
     }
 }
