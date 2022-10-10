@@ -13,20 +13,20 @@ class CustomDialogFragment : DialogFragment() {
     private lateinit var binding: FragmentCustomDialogBinding
     private lateinit var listener: ClickListenerSave
     private lateinit var bundle: Bundle
+    lateinit var alertMessage: String
 
     override fun onStart() {
         super.onStart()
         dialog?.window?.setBackgroundDrawableResource(R.drawable.dialog_shape)
     }
 
-    fun createInstance(alertMessage: String, positiveBtnText: String, negativeBtnText:String): CustomDialogFragment {
-        val frag = CustomDialogFragment()
+    fun createDialog(alertMessage: String, positiveBtnText: String, negativeBtnText:String) {
         bundle = Bundle()
         bundle.putString("alert", alertMessage)
         bundle.putString("positiveBtn", positiveBtnText)
         bundle.putString("negativeBtn", negativeBtnText)
-        frag.arguments = bundle
-        return frag
+
+        this.alertMessage =  alertMessage
     }
 
     override fun onCreateView(
@@ -46,12 +46,13 @@ class CustomDialogFragment : DialogFragment() {
         binding.fragmentCustomDialogBtnNegative.text = bundle.getString("negativeBtn")
 
         binding.fragmentCustomDialogBtnPositive.setOnClickListener {
-            if (bundle.getString("positiveBtn") == "Save") listener.onSaveNote()
-            else listener.onCancelDialog()
+            if (bundle.getString("positiveBtn") == "Save") listener.onPositiveClick()
+            else dialog?.dismiss()
+
         }
         binding.fragmentCustomDialogBtnNegative.setOnClickListener {
-            if(bundle.getString("positiveBtn")=="Save") listener.onCancelDialog()
-            else listener.onDiscardNote()
+            if(bundle.getString("positiveBtn")=="Save") dialog?.dismiss()
+            else listener.onNegativeClick()
         }
     }
 
@@ -60,8 +61,7 @@ class CustomDialogFragment : DialogFragment() {
     }
 
     interface ClickListenerSave {
-        fun onSaveNote()
-        fun onCancelDialog()
-        fun onDiscardNote()
+        fun onPositiveClick()
+        fun onNegativeClick()
     }
 }

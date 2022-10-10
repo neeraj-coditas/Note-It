@@ -19,7 +19,7 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) : Recycler
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        holder.bind(item = allNotes[position])
+        holder.bind(allNotes[position])
         holder.itemView.isLongClickable
     }
 
@@ -39,8 +39,7 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) : Recycler
             binding.notesDataClass = item
 
             itemView.setOnClickListener {
-                interaction.onItemSelected(adapterPosition,item)
-                Log.d("CheckPosition",item.id.toString())
+                interaction.onItemSelected(item)
             }
 
             itemView.setOnLongClickListener {
@@ -49,7 +48,7 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) : Recycler
                     singleNoteIvDelete.visibility = View.VISIBLE
                     singleNote.setBackgroundResource(R.drawable.delete_note_shape)
                     singleNote.setOnClickListener{
-                        interaction.onClickDelete(adapterPosition,item)
+                        interaction.onClickDelete(item)
                         singleNote.setBackgroundResource(R.drawable.single_note_shape)
                         singleNoteIvDelete.visibility = View.GONE
                         viewUnitTvTitle.visibility = View.VISIBLE
@@ -61,8 +60,8 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) : Recycler
     }
 
     interface Interaction {
-        fun onItemSelected(position: Int, item: Note)
-        fun onClickDelete(position: Int, item: Note)
+        fun onItemSelected(item: Note)
+        fun onClickDelete(item: Note)
     }
 
 

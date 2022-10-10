@@ -12,13 +12,12 @@ import com.example.noteit.databinding.FragmentEditorScreenBinding
 import com.example.noteit.editorscreen.customdialogfragment.CustomDialogFragment
 import com.example.noteit.homescreen.viewmodel.HomeScreenViewModel
 import com.example.noteit.model.Note
-import kotlin.properties.Delegates
 
 class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave {
     private val viewModel: HomeScreenViewModel by activityViewModels()
     private lateinit var binding: FragmentEditorScreenBinding
     private lateinit var dialogInstance: CustomDialogFragment
-    private lateinit var safeArgs : EditorScreenFragmentArgs
+    private lateinit var safeArgs: EditorScreenFragmentArgs
     private var noteId = 0
 
     override fun onCreateView(
@@ -47,34 +46,27 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
         dialogInstance = CustomDialogFragment()
     }
 
-    private fun saveNote() {
-        dialogInstance.createInstance("Save Note ?", "Save", "Discard")
-        showDialog()
+    private fun prepareNoteForEditing() {
+        arguments?.let {
+            val safeArgs = EditorScreenFragmentArgs.fromBundle(it)
+            val note = safeArgs.note
+            binding.fragmentEditorTextTitle.setText(note.title)
+            binding.fragmentEditorTextDescription.setText(note.description)
+        }
     }
 
-    override fun onSaveNote() {
-
-        if (noteId == 0) {
-            if (binding.fragmentEditorTextTitle.text.toString().isNotEmpty()) {
-                viewModel.insertNote(Note(binding.fragmentEditorTextTitle.text.toString(), binding.fragmentEditorTextDescription.text.toString()))
-                Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
-                dialogInstance.dismiss()
-            } else {
-                Toast.makeText(context, "Please Enter a Title", Toast.LENGTH_SHORT).show()
-                dialogInstance.dismiss()
-            }
-        } else {
-            val noteTitle = binding.fragmentEditorTextTitle.text.toString()
-            val noteDescription = binding.fragmentEditorTextDescription.text.toString()
-            viewModel.updatenote(noteId,noteTitle,noteDescription)
-            Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
-            dialogInstance.dismiss()
-        }
+    private fun saveNote() {
+        dialogInstance.createDialog(
+            "Save Note ?",
+            "Save",
+            "Discard"
+        )
+        showDialog()
     }
 
     private fun discardNote() {
         if (binding.fragmentEditorTextTitle.text?.isNotEmpty() == true || binding.fragmentEditorTextDescription.text?.isNotEmpty() == true) {
-            dialogInstance.createInstance(
+            dialogInstance.createDialog(
                 "Are you sure you want to discard your changes",
                 "Keep",
                 "Discard"
@@ -85,27 +77,44 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
         }
     }
 
-    override fun onDiscardNote() {
+    override fun onPositiveClick() {
+        if (noteId == 0) {
+            if (binding.fragmentEditorTextTitle.text.toString().isNotEmpty()) {
+                viewModel.insertNote(
+                    Note(
+                        binding.fragmentEditorTextTitle.text.toString(),
+                        binding.fragmentEditorTextDescription.text.toString()
+                    )
+                )
+                Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
+                dialogInstance.dismiss()
+            } else {
+                Toast.makeText(context, "Please Enter a Title", Toast.LENGTH_SHORT).show()
+                dialogInstance.dismiss()
+            }
+        } else {
+            val noteTitle = binding.fragmentEditorTextTitle.text.toString()
+            val noteDescription = binding.fragmentEditorTextDescription.text.toString()
+            viewModel.updatenote(noteId, noteTitle, noteDescription)
+            Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
+            dialogInstance.dismiss()
+        }
+    }
+
+
+    override fun onNegativeClick() {
         findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
     }
 
     private fun showDialog() {
-        dialogInstance.show(childFragmentManager, "ShowDialog")
+        dialogInstance.show(childFragmentManager, DIALOG_TAG)
         dialogInstance.initClickListener(this)
         dialogInstance.isCancelable = false
     }
 
-    override fun onCancelDialog() {
-        dialogInstance.dismiss()
-    }
 
-    private fun prepareNoteForEditing() {
-        arguments?.let {
-            val safeArgs = EditorScreenFragmentArgs.fromBundle(it)
-            val note = safeArgs.note
-            binding.fragmentEditorTextTitle.setText(note.title)
-            binding.fragmentEditorTextDescription.setText(note.description)
-            Toast.makeText(context,noteId.toString(),Toast.LENGTH_SHORT).show()
-        }
+    companion object {
+        const val DIALOG_TAG = "ShowDialog"
     }
 }
+

@@ -6,12 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteit.databinding.FragmentHomeScreenBinding
@@ -50,7 +46,6 @@ class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
                 binding.fragmentHomeIv.visibility = View.VISIBLE
                 binding.fragmentHomeTextCreateNote.visibility = View.VISIBLE
             }
-
         }
 
         binding.fragmentHomeFabBtn.setOnClickListener{
@@ -60,14 +55,13 @@ class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
 
     }
 
-    override fun onItemSelected(position: Int, item: Note) {
+    override fun onItemSelected(item: Note) {
         val navDirection = HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(item)
         findNavController().navigate(navDirection)
     }
 
-    override fun onClickDelete(position: Int, item: Note) {
+    override fun onClickDelete(item: Note) {
         viewModel.deleteNote(item)
     }
-
 
 }

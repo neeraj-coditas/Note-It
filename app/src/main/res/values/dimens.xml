@@ -35,5 +35,8 @@
     <dimen name="dp_42">42dp</dimen>
     <dimen name="dp_210">210dp</dimen>
     <dimen name="dp_162.6">162.6dp</dimen>
+    <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_28">28dp</dimen>
+    <dimen name="dp_44">44dp</dimen>
 
 </resources>
