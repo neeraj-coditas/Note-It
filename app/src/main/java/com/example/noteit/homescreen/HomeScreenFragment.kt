@@ -20,7 +20,7 @@ import com.example.noteit.homescreen.viewmodel.HomeScreenViewModel
 import com.example.noteit.model.Note
 
 class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
-    private val viewModel: HomeScreenViewModel by activityViewModels()
+    private lateinit var  viewModel: HomeScreenViewModel
     private lateinit var binding: FragmentHomeScreenBinding
     private val notesAdapter = HomeScreenRecyclerAdapter(this)
 
@@ -29,6 +29,7 @@ class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeScreenBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this)[HomeScreenViewModel::class.java]
         return binding.root
     }
 
@@ -54,19 +55,19 @@ class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
 
         binding.fragmentHomeFabBtn.setOnClickListener{
             val emptyList = Note("","")
-            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(
-                emptyList))
+            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(emptyList))
         }
 
     }
 
     override fun onItemSelected(position: Int, item: Note) {
         val navDirection = HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(item)
-        Log.d("CheckID",item.id.toString())
         findNavController().navigate(navDirection)
     }
 
-    override fun onItemLongClicked(position: Int, item: Note) {
+    override fun onClickDelete(position: Int, item: Note) {
         viewModel.deleteNote(item)
     }
+
+
 }

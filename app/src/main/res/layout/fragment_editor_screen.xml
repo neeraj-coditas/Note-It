@@ -22,7 +22,7 @@
         android:layout_marginStart="@dimen/dp_24"
         android:layout_marginEnd="@dimen/dp_24"
         android:textSize="@dimen/sp_48"
-        android:textColor="@color/grey"
+        android:textColor="@color/white"
         />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -40,7 +40,7 @@
         android:layout_marginStart="@dimen/dp_24"
         android:layout_marginEnd="@dimen/dp_24"
         android:textSize="@dimen/sp_23"
-        android:textColor="@color/grey"
+        android:textColor="@color/white"
         />
 
     <androidx.appcompat.widget.AppCompatImageButton

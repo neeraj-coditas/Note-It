@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.noteit.model.Note
+import com.example.noteit.model.NoteDao
 import com.example.noteit.model.NoteDatabase
 import com.example.noteit.model.NoteRepository
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,12 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
     fun updateNote(note:Note){
         viewModelScope.launch(Dispatchers.IO) {
             noteRepository.update(note)
+        }
+    }
+
+    fun updatenote(id: Int, title: String, description : String){
+        viewModelScope.launch {
+            noteRepository.updateNote(id, title, description)
         }
     }
 

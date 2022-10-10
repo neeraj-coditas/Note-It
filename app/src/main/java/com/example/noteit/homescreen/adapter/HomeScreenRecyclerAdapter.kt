@@ -1,20 +1,13 @@
 package com.example.noteit.homescreen.adapter
 
-import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.red
-import androidx.core.graphics.toColor
 import androidx.recyclerview.widget.RecyclerView
-import com.example.noteit.MainActivity
 import com.example.noteit.R
 import com.example.noteit.databinding.SingleNoteViewBinding
 import com.example.noteit.model.Note
-import kotlin.coroutines.coroutineContext
 
 class HomeScreenRecyclerAdapter(private val interaction: Interaction) : RecyclerView.Adapter<HomeScreenRecyclerAdapter.NotesViewHolder>() {
 
@@ -47,14 +40,16 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) : Recycler
 
             itemView.setOnClickListener {
                 interaction.onItemSelected(adapterPosition,item)
+                Log.d("CheckPosition",item.id.toString())
             }
+
             itemView.setOnLongClickListener {
                 binding.apply {
                     viewUnitTvTitle.visibility = View.INVISIBLE
                     singleNoteIvDelete.visibility = View.VISIBLE
                     singleNote.setBackgroundResource(R.drawable.delete_note_shape)
                     singleNote.setOnClickListener{
-                        interaction.onItemLongClicked(adapterPosition,item)
+                        interaction.onClickDelete(adapterPosition,item)
                         singleNote.setBackgroundResource(R.drawable.single_note_shape)
                         singleNoteIvDelete.visibility = View.GONE
                         viewUnitTvTitle.visibility = View.VISIBLE
@@ -67,7 +62,7 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) : Recycler
 
     interface Interaction {
         fun onItemSelected(position: Int, item: Note)
-        fun onItemLongClicked( position: Int, item: Note)
+        fun onClickDelete(position: Int, item: Note)
     }
 
 
