@@ -39,11 +39,6 @@ class HomeScreenViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun updatenote(id: Int, title: String, description : String){
-        viewModelScope.launch {
-            noteRepository.updateNote(id, title, description)
-        }
-    }
 
     fun searchDatabase(searchQuery: String): LiveData<List<Note>>? {
         readData = noteRepository.searchDatabase(searchQuery)

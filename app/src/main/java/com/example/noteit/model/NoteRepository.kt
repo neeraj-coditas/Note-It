@@ -22,10 +22,6 @@ class NoteRepository(private val noteDao: NoteDao) {
         noteDao.update(note)
     }
 
-    suspend fun updateNote(id: Int, title: String, description : String){
-        noteDao.updateNote(id,title,description)
-    }
-
     fun searchDatabase(searchQuery: String): LiveData<List<Note>> {
         return noteDao.searchDatabase(searchQuery)
     }

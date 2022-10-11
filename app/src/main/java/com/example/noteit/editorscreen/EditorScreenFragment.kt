@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -19,12 +20,18 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
     private lateinit var dialogInstance: CustomDialogFragment
     private lateinit var safeArgs: EditorScreenFragmentArgs
     private var noteId = 0
+    private val onBackPressImpl = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            discardNote()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, onBackPressImpl)
         binding = FragmentEditorScreenBinding.inflate(inflater, container, false)
         safeArgs = EditorScreenFragmentArgs.fromBundle(requireArguments())
         noteId = safeArgs.note.id
@@ -35,6 +42,7 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        dialogInstance = CustomDialogFragment()
         prepareNoteForEditing()
 
         binding.fragmentEditorBtnSave.setOnClickListener {
@@ -43,7 +51,9 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
         binding.fragmentEditorBtnBack.setOnClickListener {
             discardNote()
         }
-        dialogInstance = CustomDialogFragment()
+        binding.fragmentEditorBtnPreview.setOnClickListener {
+            previewNote()
+        }
     }
 
     private fun prepareNoteForEditing() {
@@ -65,16 +75,53 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
     }
 
     private fun discardNote() {
-        if (binding.fragmentEditorTextTitle.text?.isNotEmpty() == true || binding.fragmentEditorTextDescription.text?.isNotEmpty() == true) {
-            dialogInstance.createDialog(
-                "Are you sure you want to discard your changes",
-                "Keep",
-                "Discard"
-            )
-            showDialog()
-        } else {
-            findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
+        arguments?.let {
+            val safeArgs = EditorScreenFragmentArgs.fromBundle(it)
+            val note = safeArgs.note
+
+            val currentTitle = binding.fragmentEditorTextTitle.text.toString()
+            val currentDescription = binding.fragmentEditorTextDescription.text.toString()
+
+            val isDataNotEmpty = binding.fragmentEditorTextTitle.text?.isNotEmpty() == true
+                    || binding.fragmentEditorTextDescription.text?.isNotEmpty() == true
+
+            val hasDataChanged =
+                note.title != currentTitle || note.description != currentDescription
+
+            if (isDataNotEmpty && hasDataChanged) {
+                dialogInstance.createDialog(
+                    "Are you sure you want to discard your changes",
+                    "Keep",
+                    "Discard"
+                )
+                showDialog()
+            } else {
+                findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
+            }
         }
+
+    }
+
+    private fun previewNote() {
+        binding.fragmentEditorTextTitle.isEnabled = false
+        binding.fragmentEditorTextDescription.isEnabled = false
+        binding.fragmentEditorBtnBack.visibility = View.INVISIBLE
+        binding.fragmentEditorBtnPreview.visibility = View.INVISIBLE
+        binding.fragmentEditorBtnEdit.visibility = View.VISIBLE
+
+        binding.fragmentEditorBtnEdit.setOnClickListener {
+            binding.fragmentEditorTextTitle.isEnabled = true
+            binding.fragmentEditorTextDescription.isEnabled = true
+            binding.fragmentEditorBtnBack.visibility = View.VISIBLE
+            binding.fragmentEditorBtnPreview.visibility = View.VISIBLE
+            binding.fragmentEditorBtnEdit.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showDialog() {
+        dialogInstance.show(childFragmentManager, DIALOG_TAG)
+        dialogInstance.initClickListener(this)
+        dialogInstance.isCancelable = false
     }
 
     override fun onPositiveClick() {
@@ -92,27 +139,23 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
                 Toast.makeText(context, "Please Enter a Title", Toast.LENGTH_SHORT).show()
                 dialogInstance.dismiss()
             }
+
+            findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
+
         } else {
-            val noteTitle = binding.fragmentEditorTextTitle.text.toString()
-            val noteDescription = binding.fragmentEditorTextDescription.text.toString()
-//            viewModel.updatenote(noteId, noteTitle, noteDescription)
-            viewModel.updateNote()
+            val note = safeArgs.note
+            note.title = binding.fragmentEditorTextTitle.text.toString()
+            note.description = binding.fragmentEditorTextDescription.text.toString()
+            viewModel.updateNote(note)
             Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
             dialogInstance.dismiss()
         }
-    }
 
+    }
 
     override fun onNegativeClick() {
         findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
     }
-
-    private fun showDialog() {
-        dialogInstance.show(childFragmentManager, DIALOG_TAG)
-        dialogInstance.initClickListener(this)
-        dialogInstance.isCancelable = false
-    }
-
 
     companion object {
         const val DIALOG_TAG = "ShowDialog"
