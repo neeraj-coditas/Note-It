@@ -4,6 +4,7 @@ import android.icu.text.CaseMap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
@@ -22,4 +23,8 @@ interface NoteDao {
 
     @Query("Select * from notes_table order by id DESC")
     fun getAllNotes(): LiveData<List<Note>>
+
+    @Query("SELECT * FROM notes_table WHERE `Note Title` LIKE :searchQuery OR `Note Description` LIKE :searchQuery")
+    fun searchDatabase(searchQuery: String): LiveData<List<Note>>
+
 }

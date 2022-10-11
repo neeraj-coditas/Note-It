@@ -1,7 +1,6 @@
 package com.example.noteit.homescreen
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +50,10 @@ class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
         binding.fragmentHomeFabBtn.setOnClickListener{
             val emptyList = Note("","")
             view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(emptyList))
+        }
+
+        binding.fragmentHomeIvSearchNote.setOnClickListener{
+            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToSearchScreenFragment())
         }
 
     }

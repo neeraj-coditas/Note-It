@@ -10,5 +10,6 @@
     <color name="grey">#9A9A9A</color>
     <color name="red">#FF0000</color>
     <color name="green">#30BE71</color>
+    <color name="light_grey">#3B3B3B</color>
 
 </resources>

@@ -13,6 +13,9 @@
             android:id="@+id/action_homeFragment_to_editorScreenFragment"
             app:destination="@id/editorScreenFragment" >
         </action>
+        <action
+            android:id="@+id/action_homeFragment_to_searchScreenFragment"
+            app:destination="@id/searchScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -47,4 +50,13 @@
         android:id="@+id/customDialogFragment"
         android:name="com.example.noteit.editorscreen.customdialogfragment.CustomDialogFragment"
         android:label="SaveDialogFragment" />
+    <fragment
+        android:id="@+id/searchScreenFragment"
+        android:name="com.example.noteit.searchscreen.SearchScreenFragment"
+        android:label="fragment_search_screen"
+        tools:layout="@layout/fragment_search_screen" >
+        <action
+            android:id="@+id/action_searchScreenFragment_to_editorScreenFragment"
+            app:destination="@id/editorScreenFragment" />
+    </fragment>
 </navigation>

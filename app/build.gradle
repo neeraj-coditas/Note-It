@@ -53,14 +53,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.2")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.2")
 
-//viewModels
-/*    implementation 'androidx.fragment:fragment-ktx:1.5.3'
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha02")*/
-/*    // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-livedata:2.6.0-alpha02")
-    implementation("androidx.lifecycle:lifecycle-runtime:2.6.0-alpha02")*/
 
 // navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.2")
@@ -76,4 +68,6 @@ dependencies {
 // To use Kotlin Symbol Processing (KSP)
 // ksp("androidx.room:room-compiler:2.4.3")
     implementation "androidx.room:room-ktx:2.4.3"
+
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
 }

@@ -3,6 +3,7 @@ package com.example.noteit.model
 import android.icu.text.CaseMap
 import android.util.Log
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 
 class NoteRepository(private val noteDao: NoteDao) {
 
@@ -23,6 +24,10 @@ class NoteRepository(private val noteDao: NoteDao) {
 
     suspend fun updateNote(id: Int, title: String, description : String){
         noteDao.updateNote(id,title,description)
+    }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<Note>> {
+        return noteDao.searchDatabase(searchQuery)
     }
 
 }

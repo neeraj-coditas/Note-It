@@ -95,7 +95,8 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.ClickListenerSave 
         } else {
             val noteTitle = binding.fragmentEditorTextTitle.text.toString()
             val noteDescription = binding.fragmentEditorTextDescription.text.toString()
-            viewModel.updatenote(noteId, noteTitle, noteDescription)
+//            viewModel.updatenote(noteId, noteTitle, noteDescription)
+            viewModel.updateNote()
             Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
             dialogInstance.dismiss()
         }
