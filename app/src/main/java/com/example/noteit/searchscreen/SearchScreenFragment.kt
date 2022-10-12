@@ -4,30 +4,26 @@ import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.noteit.R
 import com.example.noteit.databinding.FragmentSearchScreenBinding
-import com.example.noteit.homescreen.HomeScreenFragmentDirections
-import com.example.noteit.homescreen.adapter.HomeScreenRecyclerAdapter
-import com.example.noteit.homescreen.viewmodel.HomeScreenViewModel
+import com.example.noteit.viewmodel.NoteViewModel
 import com.example.noteit.model.Note
 import com.example.noteit.searchscreen.adapter.SearchScreenRecyclerAdapter
 
 class SearchScreenFragment : Fragment(), SearchView.OnQueryTextListener, SearchScreenRecyclerAdapter.Interaction{
 
     private lateinit var binding: FragmentSearchScreenBinding
-    private lateinit var viewModel: HomeScreenViewModel
+    private val viewModel: NoteViewModel by viewModels()
     private val searchAdapter = SearchScreenRecyclerAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentSearchScreenBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[HomeScreenViewModel::class.java]
         return binding.root
     }
 

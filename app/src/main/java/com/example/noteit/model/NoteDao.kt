@@ -18,7 +18,7 @@ interface NoteDao {
     @Update
     suspend fun update(note: Note)
 
-    @Query("Select * from notes_table order by id DESC")
+    @Query("Select * from notes_table order by `Note Time` DESC")
     fun getAllNotes(): LiveData<List<Note>>
 
     @Query("SELECT * FROM notes_table WHERE `Note Title` LIKE :searchQuery OR `Note Description` LIKE :searchQuery")

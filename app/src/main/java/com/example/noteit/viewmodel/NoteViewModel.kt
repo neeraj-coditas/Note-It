@@ -1,19 +1,16 @@
-package com.example.noteit.homescreen.viewmodel
+package com.example.noteit.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.noteit.model.Note
-import com.example.noteit.model.NoteDao
 import com.example.noteit.model.NoteDatabase
 import com.example.noteit.model.NoteRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class HomeScreenViewModel(application: Application) : AndroidViewModel(application){
+class NoteViewModel(application: Application) : AndroidViewModel(application){
 
     private val dao = NoteDatabase.getDatabase(application).getNoteDao()
     private val noteRepository = NoteRepository(dao)

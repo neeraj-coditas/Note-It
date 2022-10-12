@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteit.R
 import com.example.noteit.databinding.SingleNoteViewBinding
@@ -14,13 +15,11 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) :
     RecyclerView.Adapter<HomeScreenRecyclerAdapter.NotesViewHolder>() {
 
     val allNotes = ArrayList<Note>()
-    lateinit var mcontext: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val binding =
             SingleNoteViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        mcontext = parent.context
-        return NotesViewHolder(binding, interaction, mcontext)
+        return NotesViewHolder(binding, interaction)
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
@@ -40,8 +39,7 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) :
 
     class NotesViewHolder(
         val binding: SingleNoteViewBinding,
-        private val interaction: Interaction,
-        val context: Context
+        private val interaction: Interaction
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Note) {
             binding.notesDataClass = item
@@ -54,9 +52,12 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) :
 
             itemView.setOnLongClickListener {
                 binding.apply {
+
                     viewUnitTvTitle.visibility = View.INVISIBLE
                     singleNoteIvDelete.visibility = View.VISIBLE
                     singleNote.setBackgroundResource(R.drawable.delete_note_shape)
+                    val background = binding.singleNote.background
+                    background.setTint(binding.singleNote.resources.getColor(R.color.red))
                     singleNote.setOnClickListener {
                         interaction.onClickDelete(item)
                         singleNote.setBackgroundResource(R.drawable.single_note_shape)
@@ -70,9 +71,7 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) :
         }
 
         fun assignColor() {
-            //val noteColor = listOf("#FD99FF","#FF9E9E","#91F48F","#FFF599","#9EFFFF","#B69CFF")
-            //holder.itemView.setBackgroundColor(Color.parseColor(random))
-            val colorArray = context.resources.getIntArray(R.array.rainbow)
+            val colorArray = binding.root.context.resources.getIntArray(R.array.rainbow)
             val random = colorArray.random()
             val background = binding.singleNote.background
             background.setTint(random)

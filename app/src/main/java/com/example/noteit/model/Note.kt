@@ -10,7 +10,8 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "notes_table")
 class Note(
     @ColumnInfo(name = "Note Title") var title: String,
-    @ColumnInfo(name = "Note Description") var description: String
+    @ColumnInfo(name = "Note Description") var description: String,
+    @ColumnInfo(name = "Note Time") var timeStamp : String
 ) : Parcelable {
 
     @PrimaryKey(autoGenerate = true)

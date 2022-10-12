@@ -9,14 +9,16 @@ import com.example.noteit.R
 import com.example.noteit.databinding.SingleNoteViewBinding
 import com.example.noteit.model.Note
 
-class SearchScreenRecyclerAdapter(private val interaction: Interaction) : RecyclerView.Adapter<SearchScreenRecyclerAdapter.NotesViewHolder>() {
+class SearchScreenRecyclerAdapter(private val interaction: Interaction) :
+    RecyclerView.Adapter<SearchScreenRecyclerAdapter.NotesViewHolder>() {
 
     val allNotes = ArrayList<Note>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
-        val binding = SingleNoteViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return NotesViewHolder(binding,interaction)
+        val binding =
+            SingleNoteViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return NotesViewHolder(binding, interaction)
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
@@ -29,10 +31,10 @@ class SearchScreenRecyclerAdapter(private val interaction: Interaction) : Recycl
         background.setTint(Color.parseColor("#FF000000"))
     }
 
-    fun updateList(newList : List<Note>){
+    fun updateList(newList: List<Note>) {
         allNotes.clear()
         allNotes.addAll(newList)
-        Log.d("ListCheckAtAdapter",newList.toString())
+        Log.d("ListCheckAtAdapter", newList.toString())
         notifyDataSetChanged()
     }
 
@@ -41,8 +43,11 @@ class SearchScreenRecyclerAdapter(private val interaction: Interaction) : Recycl
         return allNotes.size
     }
 
-    class NotesViewHolder(val binding: SingleNoteViewBinding, private val interaction: SearchScreenRecyclerAdapter.Interaction)  : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Note){
+    class NotesViewHolder(
+        val binding: SingleNoteViewBinding,
+        private val interaction: Interaction
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Note) {
             binding.viewUnitTvTitle.setTextColor(Color.parseColor("#FFFFFF"))
             binding.notesDataClass = item
 
