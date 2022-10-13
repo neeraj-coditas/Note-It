@@ -13,17 +13,16 @@ import com.example.noteit.databinding.FragmentCustomDialogBinding
 private const val ALERT_MSG = "alertMsg"
 private const val POSITIVE_BTN_TEXT = "positiveBtnText"
 private const val NEGATIVE_BTN_TEXT = "negativeBtnText"
-private const val ACTION_MSG = "actionMsg"
+const val REQUEST_KEY = "requestKey"
+const val BUNDLE_KEY = "bundleKey"
 
 
 class CustomDialogFragment : DialogFragment() {
-    private var param1: String? = null
-    private var param2: String? = null
-    private var param3: String? = null
-    private var param4: String? = null
+    private var alertMessage: String? = null
+    private var positiveButtonText: String? = null
+    private var negativeButtonText: String? = null
 
     private lateinit var binding: FragmentCustomDialogBinding
-    private lateinit var listener: CustomDialogClickListener
 
     override fun onStart() {
         super.onStart()
@@ -33,10 +32,9 @@ class CustomDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ALERT_MSG)
-            param2 = it.getString(POSITIVE_BTN_TEXT)
-            param3 = it.getString(NEGATIVE_BTN_TEXT)
-            param4 = it.getString(ACTION_MSG)
+            alertMessage = it.getString(ALERT_MSG)
+            positiveButtonText = it.getString(POSITIVE_BTN_TEXT)
+            negativeButtonText = it.getString(NEGATIVE_BTN_TEXT)
         }
     }
 
@@ -51,80 +49,41 @@ class CustomDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.fragmentCustomDialogTvAlert.text = param1
-        binding.fragmentCustomDialogBtnPositive.text = param2
-        binding.fragmentCustomDialogBtnNegative.text = param3
+        binding.fragmentCustomDialogTvAlert.text = alertMessage
+        binding.fragmentCustomDialogBtnPositive.text = positiveButtonText
+        binding.fragmentCustomDialogBtnNegative.text = negativeButtonText
+
         binding.fragmentCustomDialogBtnPositive.setOnClickListener {
-
-            if (param4 == "actionSave") {
-                val saveResult = true
-                requireActivity().supportFragmentManager.setFragmentResult(
-                    "saveKey",
-                    bundleOf("bundleKey" to saveResult)
-                )
-            } else {
-                val discardNote = true
-                requireActivity().supportFragmentManager.setFragmentResult(
-                    "discardKey",
-                    bundleOf("bundleKey" to discardNote)
-                )
-            }
-
-            //listener.onPositiveClick()
+            val result = true
+            requireActivity().supportFragmentManager.setFragmentResult(
+                REQUEST_KEY,
+                bundleOf(BUNDLE_KEY to result)
+            )
         }
 
         binding.fragmentCustomDialogBtnNegative.setOnClickListener {
-            if (param4 == "actionSave") {
-                val saveResult = false
+                val result = false
                 requireActivity().supportFragmentManager.setFragmentResult(
-                    "saveKey",
-                    bundleOf("bundleKey" to saveResult)
-                )
-            } else {
-
-                val discardNote = false
-                requireActivity().supportFragmentManager.setFragmentResult(
-                    "discardKey",
-                    bundleOf("bundleKey" to discardNote)
+                    REQUEST_KEY,
+                    bundleOf(BUNDLE_KEY to result)
                 )
             }
-            //listener.onNegativeClick()
         }
-    }
-
-    fun initClickListener(buttonCallback: CustomDialogClickListener) {
-        this.listener = buttonCallback
-    }
-
-    interface CustomDialogClickListener {
-        fun onPositiveClick()
-        fun onNegativeClick()
-    }
 
     companion object {
 
         fun newInstance(
             alertMessage: String,
             positiveBtntext: String,
-            negativeBtnText: String,
-            actionMsg: String
+            negativeBtnText: String
         ): CustomDialogFragment {
-            /*BlankFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ALERT_MSG, alertMessage)
-                    putString(POSITIVE_BTN_TEXT, positiveBtntext)
-                    putString(NEGATIVE_BTN_TEXT, negativeBtnText)
-                    putString(ACTION_MSG, actionMsg)
-                }
-            }*/
 
             val fragment = CustomDialogFragment()
 
             val frag = Bundle()
-            frag.putString(ALERT_MSG,alertMessage)
-            frag.putString(POSITIVE_BTN_TEXT,positiveBtntext)
-            frag.putString(NEGATIVE_BTN_TEXT,negativeBtnText)
-            frag.putString(ACTION_MSG,actionMsg)
+            frag.putString(ALERT_MSG, alertMessage)
+            frag.putString(POSITIVE_BTN_TEXT, positiveBtntext)
+            frag.putString(NEGATIVE_BTN_TEXT, negativeBtnText)
 
             fragment.arguments = frag
             return fragment

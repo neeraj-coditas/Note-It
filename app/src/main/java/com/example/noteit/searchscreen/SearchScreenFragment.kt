@@ -1,17 +1,18 @@
 package com.example.noteit.searchscreen
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteit.databinding.FragmentSearchScreenBinding
-import com.example.noteit.viewmodel.NoteViewModel
 import com.example.noteit.model.Note
 import com.example.noteit.searchscreen.adapter.SearchScreenRecyclerAdapter
+import com.example.noteit.viewmodel.NoteViewModel
 
 class SearchScreenFragment : Fragment(), SearchView.OnQueryTextListener, SearchScreenRecyclerAdapter.Interaction{
 

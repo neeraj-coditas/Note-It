@@ -60,6 +60,4 @@ class SearchScreenRecyclerAdapter(private val interaction: Interaction) :
     interface Interaction {
         fun onItemSelected(item: Note)
     }
-
-
 }

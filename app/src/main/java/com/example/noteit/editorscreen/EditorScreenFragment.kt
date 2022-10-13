@@ -2,29 +2,27 @@ package com.example.noteit.editorscreen
 
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.noteit.databinding.FragmentEditorScreenBinding
 import com.example.noteit.editorscreen.customdialogfragment.CustomDialogFragment
-import com.example.noteit.viewmodel.NoteViewModel
 import com.example.noteit.model.Note
+import com.example.noteit.viewmodel.NoteViewModel
 import java.util.*
 
-class EditorScreenFragment : Fragment(), CustomDialogFragment.CustomDialogClickListener {
+class EditorScreenFragment : Fragment() {
     private val viewModel: NoteViewModel by viewModels()
     private lateinit var binding: FragmentEditorScreenBinding
     private lateinit var dialogInstance: CustomDialogFragment
     private lateinit var safeArgs: EditorScreenFragmentArgs
     private var noteId = 0
+    private lateinit var noteTime: String
     private val onBackPressImpl = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             discardNote()
@@ -40,6 +38,7 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.CustomDialogClickL
         binding = FragmentEditorScreenBinding.inflate(inflater, container, false)
         safeArgs = EditorScreenFragmentArgs.fromBundle(requireArguments())
         noteId = safeArgs.note.id
+        noteTime = SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(Date())
 
         return binding.root
     }
@@ -62,24 +61,20 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.CustomDialogClickL
         }
     }
 
-    private fun saveNote(){
-        dialogInstance = CustomDialogFragment.newInstance("Save Note ?",
+    private fun saveNote() {
+        dialogInstance = CustomDialogFragment.newInstance(
+            "Save Note ?",
             "Save",
-            "Discard",
-            "actionSave")
+            "Discard"
+        )
 
         showDialog()
 
         requireActivity().supportFragmentManager
-            .setFragmentResultListener("saveKey", viewLifecycleOwner) { requestKey, bundle ->
-                val result = bundle.getBoolean("bundleKey")
+            .setFragmentResultListener(REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
 
+                val result = bundle.getBoolean(BUNDLE_KEY)
                 if (result) {
-                    val noteTime =
-                        SimpleDateFormat(
-                            "dd-M HH:mm:ss",
-                            Locale.getDefault()
-                        ).format(Date())
                     if (noteId == 0) {
                         if (binding.fragmentEditorTextTitle.text.toString().isNotEmpty()) {
                             viewModel.insertNote(
@@ -101,13 +96,21 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.CustomDialogClickL
                         findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
 
                     } else {
-                        val note = safeArgs.note
-                        note.title = binding.fragmentEditorTextTitle.text.toString()
-                        note.description = binding.fragmentEditorTextDescription.text.toString()
-                        note.timeStamp = noteTime
-                        viewModel.updateNote(note)
-                        Toast.makeText(context, "Note Updated!", Toast.LENGTH_SHORT).show()
-                        dialogInstance.dismiss()
+                        if ((binding.fragmentEditorTextTitle.text.toString().isNotEmpty())) {
+                            val note = safeArgs.note
+                            note.title = binding.fragmentEditorTextTitle.text.toString()
+                            note.description = binding.fragmentEditorTextDescription.text.toString()
+                            note.timeStamp = noteTime
+                            viewModel.updateNote(note)
+                            Toast.makeText(context, "Note Updated!", Toast.LENGTH_SHORT).show()
+                            dialogInstance.dismiss()
+                        }
+                        else
+                        {
+                            Toast.makeText(context, "Please Enter a Title", Toast.LENGTH_SHORT)
+                                .show()
+                            dialogInstance.dismiss()
+                        }
                     }
                 } else {
                     dialogInstance.dismiss()
@@ -133,16 +136,15 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.CustomDialogClickL
             dialogInstance = CustomDialogFragment.newInstance(
                 "Are you sure you want to discard your changes",
                 "Keep",
-                "Discard",
-                "actionDiscard"
+                "Discard"
             )
 
             showDialog()
 
             requireActivity().supportFragmentManager
-                .setFragmentResultListener("discardKey", viewLifecycleOwner) { requestKey, bundle ->
-                    val result = bundle.getBoolean("bundleKey")
+                .setFragmentResultListener(REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
 
+                    val result = bundle.getBoolean(BUNDLE_KEY)
                     if (result) {
                         dialogInstance.dismiss()
                     } else {
@@ -183,59 +185,13 @@ class EditorScreenFragment : Fragment(), CustomDialogFragment.CustomDialogClickL
 
     private fun showDialog() {
         dialogInstance.show(childFragmentManager, SHOW_DIALOG)
-        dialogInstance.initClickListener(this)
-    }
-
-    override fun onPositiveClick() {
-        if (true) {
-            if (noteId == 0) {
-                if (binding.fragmentEditorTextTitle.text.toString().isNotEmpty()) {
-                    val noteTime =
-                        SimpleDateFormat("dd-M HH:mm", Locale.getDefault()).format(Date())
-                    viewModel.insertNote(
-                        Note(
-                            binding.fragmentEditorTextTitle.text.toString(),
-                            binding.fragmentEditorTextDescription.text.toString(),
-                            noteTime
-                        )
-                    )
-                    Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
-                    dialogInstance.dismiss()
-                } else {
-                    Toast.makeText(context, "Please Enter a Title", Toast.LENGTH_SHORT).show()
-                    dialogInstance.dismiss()
-                }
-
-                findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
-
-            } else {
-                val note = safeArgs.note
-                val noteTime = SimpleDateFormat("dd-M HH:mm", Locale.getDefault()).format(Date())
-                note.title = binding.fragmentEditorTextTitle.text.toString()
-                note.description = binding.fragmentEditorTextDescription.text.toString()
-                note.timeStamp = noteTime
-                viewModel.updateNote(note)
-                Toast.makeText(context, "Note Updated!", Toast.LENGTH_SHORT).show()
-                dialogInstance.dismiss()
-            }
-        } else {
-            dialogInstance.dismiss()
-        }
-
-    }
-
-    override fun onNegativeClick() {
-        if (true) {
-            findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
-
-        } else {
-            dialogInstance.dismiss()
-        }
-
     }
 
     companion object {
         const val SHOW_DIALOG = "ShowDialog"
+        const val DATE_FORMAT = "dd-M HH:mm:ss"
+        const val REQUEST_KEY = "requestKey"
+        const val BUNDLE_KEY = "bundleKey"
     }
 }
 
