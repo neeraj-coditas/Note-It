@@ -1,18 +1,17 @@
-package com.example.noteit.searchscreen.adapter
+package com.example.noteit.ui.searchscreen.adapter
 
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.noteit.R
 import com.example.noteit.databinding.SingleNoteViewBinding
-import com.example.noteit.model.Note
+import com.example.noteit.data.Note
 
-class SearchScreenRecyclerAdapter(private val interaction: Interaction) :
-    RecyclerView.Adapter<SearchScreenRecyclerAdapter.NotesViewHolder>() {
+class SearchRecyclerAdapter(private val interaction: Interaction) :
+    RecyclerView.Adapter<SearchRecyclerAdapter.NotesViewHolder>() {
 
-    val allNotes = ArrayList<Note>()
+    private val allNotes = ArrayList<Note>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
@@ -35,16 +34,15 @@ class SearchScreenRecyclerAdapter(private val interaction: Interaction) :
         allNotes.clear()
         allNotes.addAll(newList)
         Log.d("ListCheckAtAdapter", newList.toString())
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, newList.size + 1)
+
     }
 
+    override fun getItemCount(): Int = allNotes.size
 
-    override fun getItemCount(): Int {
-        return allNotes.size
-    }
 
     class NotesViewHolder(
-        val binding: SingleNoteViewBinding,
+        private val binding: SingleNoteViewBinding,
         private val interaction: Interaction
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Note) {

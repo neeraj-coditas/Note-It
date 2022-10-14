@@ -7,13 +7,13 @@
     <data>
         <variable
             name="editorscreen"
-            type="com.example.noteit.model.Note" />
+            type="com.example.noteit.data.Note" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".editorscreen.EditorScreenFragment"
+        tools:context=".ui.editorscreen.EditorScreenFragment"
         android:background="@color/lighter_black">
 
         <androidx.appcompat.widget.AppCompatEditText

@@ -1,4 +1,4 @@
-package com.example.noteit.searchscreen
+package com.example.noteit.ui.searchscreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,15 +10,16 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteit.databinding.FragmentSearchScreenBinding
-import com.example.noteit.model.Note
-import com.example.noteit.searchscreen.adapter.SearchScreenRecyclerAdapter
+import com.example.noteit.data.Note
+import com.example.noteit.ui.searchscreen.adapter.SearchRecyclerAdapter
 import com.example.noteit.viewmodel.NoteViewModel
 
-class SearchScreenFragment : Fragment(), SearchView.OnQueryTextListener, SearchScreenRecyclerAdapter.Interaction{
+class SearchScreenFragment : Fragment(), SearchView.OnQueryTextListener,
+    SearchRecyclerAdapter.Interaction {
 
     private lateinit var binding: FragmentSearchScreenBinding
     private val viewModel: NoteViewModel by viewModels()
-    private val searchAdapter = SearchScreenRecyclerAdapter(this)
+    private val searchAdapter = SearchRecyclerAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,25 +54,28 @@ class SearchScreenFragment : Fragment(), SearchView.OnQueryTextListener, SearchS
     }
 
     private fun searchDatabase(query: String) {
-        val searchQuery = "%$query%"
-       viewModel.searchDatabase(searchQuery)
-        viewModel.readData?.observe(viewLifecycleOwner) {
-            if(it.isNotEmpty()) {
-                binding.fragmentSearchTvNoteNotFound.visibility = View.INVISIBLE
-                binding.fragmentScreenIvNoteNotFound.visibility = View.INVISIBLE
-                binding.fragmentSearchScreenRv.visibility = View.VISIBLE
+        viewModel.searchDatabase(query).observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                binding.run {
+                    fragmentSearchTvNoteNotFound.visibility = View.INVISIBLE
+                    fragmentScreenIvNoteNotFound.visibility = View.INVISIBLE
+                    fragmentSearchScreenRv.visibility = View.VISIBLE
+                }
                 searchAdapter.updateList(it)
-            }
-            else{
-                binding.fragmentScreenIvNoteNotFound.visibility = View.VISIBLE
-                binding.fragmentSearchTvNoteNotFound.visibility = View.VISIBLE
-                binding.fragmentSearchScreenRv.visibility = View.INVISIBLE
+            } else {
+                binding.run {
+                    fragmentScreenIvNoteNotFound.visibility = View.VISIBLE
+                    fragmentSearchTvNoteNotFound.visibility = View.VISIBLE
+                    fragmentSearchScreenRv.visibility = View.INVISIBLE
+                }
+
             }
         }
     }
 
     override fun onItemSelected(item: Note) {
-        val navDirection = SearchScreenFragmentDirections.actionSearchScreenFragmentToEditorScreenFragment(item)
+        val navDirection =
+            SearchScreenFragmentDirections.actionSearchScreenFragmentToEditorScreenFragment(item)
         findNavController().navigate(navDirection)
     }
 }

@@ -1,17 +1,19 @@
-package com.example.noteit.homescreen.adapter
+package com.example.noteit.ui.homescreen.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteit.R
 import com.example.noteit.databinding.SingleNoteViewBinding
-import com.example.noteit.model.Note
+import com.example.noteit.data.Note
 
-class HomeScreenRecyclerAdapter(private val interaction: Interaction) :
-    RecyclerView.Adapter<HomeScreenRecyclerAdapter.NotesViewHolder>() {
+class NotesRecyclerAdapter(private val interaction: Interaction) :
+    RecyclerView.Adapter<NotesRecyclerAdapter.NotesViewHolder>() {
 
     private val allNotes = ArrayList<Note>()
+    private var count = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val binding =
@@ -26,42 +28,42 @@ class HomeScreenRecyclerAdapter(private val interaction: Interaction) :
     fun updateList(newList: List<Note>) {
         allNotes.clear()
         allNotes.addAll(newList)
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, newList.size + 1)
     }
 
-    override fun getItemCount(): Int {
-        return allNotes.size
-    }
+    override fun getItemCount(): Int = allNotes.size
 
-    class NotesViewHolder(
+    inner class NotesViewHolder(
         private val binding: SingleNoteViewBinding,
         private val interaction: Interaction
     ) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: Note) {
             binding.notesDataClass = item
-
             assignColor()
-
             itemView.setOnClickListener {
                 interaction.onItemSelected(item)
             }
 
             itemView.setOnLongClickListener {
+                if (count < 0) {
+                    binding.apply {
+                        viewUnitTvTitle.visibility = View.INVISIBLE
+                        singleNoteIvDelete.visibility = View.VISIBLE
+                        singleNote.setBackgroundResource(R.drawable.delete_note_shape)
 
-                binding.apply {
-                    viewUnitTvTitle.visibility = View.INVISIBLE
-                    singleNoteIvDelete.visibility = View.VISIBLE
-                    singleNote.setBackgroundResource(R.drawable.delete_note_shape)
-                    val background = binding.singleNote.background
-                    background.setTint(binding.singleNote.resources.getColor(R.color.red)) //to be deleted later after handling delete focus
-                    singleNote.setOnClickListener {
-                        interaction.onClickDelete(item)
-                        singleNote.setBackgroundResource(R.drawable.single_note_shape)
-                        singleNoteIvDelete.visibility = View.GONE
-                        viewUnitTvTitle.visibility = View.VISIBLE
+                        singleNote.setOnClickListener {
+                            interaction.onClickDelete(item)
+                            singleNote.setBackgroundResource(R.drawable.single_note_shape)
+                            singleNoteIvDelete.visibility = View.GONE
+                            viewUnitTvTitle.visibility = View.VISIBLE
+                            count--
+                        }
                     }
-                }
 
+                } else {
+                    Toast.makeText(binding.root.context, "Not Allowed", Toast.LENGTH_SHORT).show()
+                }
                 true
             }
         }

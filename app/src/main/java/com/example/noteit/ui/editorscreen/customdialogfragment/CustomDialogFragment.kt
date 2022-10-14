@@ -1,4 +1,4 @@
-package com.example.noteit.editorscreen.customdialogfragment
+package com.example.noteit.ui.editorscreen.customdialogfragment
 
 
 import android.os.Bundle
@@ -9,16 +9,17 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.example.noteit.R
 import com.example.noteit.databinding.FragmentCustomDialogBinding
+import com.example.noteit.ui.editorscreen.EditorScreenFragment
 
-private const val ALERT_MSG = "alertMsg"
-private const val POSITIVE_BTN_TEXT = "positiveBtnText"
-private const val NEGATIVE_BTN_TEXT = "negativeBtnText"
-const val REQUEST_KEY = "requestKey"
-const val BUNDLE_KEY = "bundleKey"
+private const val ALERT_MSG_BUNDLE_KEY = "alertMsg"
+private const val POSITIVE_BTN_TEXT_BUNDLE_KEY = "positiveBtnText"
+private const val NEGATIVE_BTN_TEXT_BUNDLE_KEY = "negativeBtnText"
+private const val REQUEST_KEY = EditorScreenFragment.REQUEST_KEY
+private const val BUNDLE_KEY = EditorScreenFragment.BUNDLE_KEY
 
 
 class CustomDialogFragment : DialogFragment() {
-    private var alertMessage: String? = null
+    private var alertMessage : String? = null
     private var positiveButtonText: String? = null
     private var negativeButtonText: String? = null
 
@@ -32,9 +33,9 @@ class CustomDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            alertMessage = it.getString(ALERT_MSG)
-            positiveButtonText = it.getString(POSITIVE_BTN_TEXT)
-            negativeButtonText = it.getString(NEGATIVE_BTN_TEXT)
+            alertMessage = it.getString(ALERT_MSG_BUNDLE_KEY)
+            positiveButtonText = it.getString(POSITIVE_BTN_TEXT_BUNDLE_KEY)
+            negativeButtonText = it.getString(NEGATIVE_BTN_TEXT_BUNDLE_KEY)
         }
     }
 
@@ -49,19 +50,20 @@ class CustomDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.fragmentCustomDialogTvAlert.text = alertMessage
-        binding.fragmentCustomDialogBtnPositive.text = positiveButtonText
-        binding.fragmentCustomDialogBtnNegative.text = negativeButtonText
+        binding.apply {
+            fragmentCustomDialogTvAlert.text = alertMessage
+            fragmentCustomDialogBtnPositive.text = positiveButtonText
+            fragmentCustomDialogBtnNegative.text = negativeButtonText
 
-        binding.fragmentCustomDialogBtnPositive.setOnClickListener {
-            val result = true
-            requireActivity().supportFragmentManager.setFragmentResult(
-                REQUEST_KEY,
-                bundleOf(BUNDLE_KEY to result)
-            )
-        }
+            fragmentCustomDialogBtnPositive.setOnClickListener {
+                val result = true
+                requireActivity().supportFragmentManager.setFragmentResult(
+                    REQUEST_KEY,
+                    bundleOf(BUNDLE_KEY to result)
+                )
+            }
 
-        binding.fragmentCustomDialogBtnNegative.setOnClickListener {
+            fragmentCustomDialogBtnNegative.setOnClickListener {
                 val result = false
                 requireActivity().supportFragmentManager.setFragmentResult(
                     REQUEST_KEY,
@@ -69,6 +71,8 @@ class CustomDialogFragment : DialogFragment() {
                 )
             }
         }
+    }
+
 
     companion object {
 
@@ -80,12 +84,12 @@ class CustomDialogFragment : DialogFragment() {
 
             val fragment = CustomDialogFragment()
 
-            val frag = Bundle()
-            frag.putString(ALERT_MSG, alertMessage)
-            frag.putString(POSITIVE_BTN_TEXT, positiveBtntext)
-            frag.putString(NEGATIVE_BTN_TEXT, negativeBtnText)
+            fragment.arguments?.apply {
+                putString(ALERT_MSG_BUNDLE_KEY, alertMessage)
+                putString(POSITIVE_BTN_TEXT_BUNDLE_KEY, positiveBtntext)
+                putString(NEGATIVE_BTN_TEXT_BUNDLE_KEY, negativeBtnText)
+            }
 
-            fragment.arguments = frag
             return fragment
         }
 

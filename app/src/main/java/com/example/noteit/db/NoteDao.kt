@@ -1,10 +1,8 @@
-package com.example.noteit.model
+package com.example.noteit.db
 
-import android.icu.text.CaseMap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
+import com.example.noteit.data.Note
 
 @Dao
 interface NoteDao {

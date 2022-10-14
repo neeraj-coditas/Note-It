@@ -1,11 +1,12 @@
-package com.example.noteit.model
+package com.example.noteit.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.noteit.data.Note
 
-@Database(entities = [Note::class], version = 1, exportSchema = false)
+@Database(entities = [Note::class], version = ROOMDB_VERSION, exportSchema = false)
 abstract class NoteDatabase : RoomDatabase() {
 
     abstract fun getNoteDao(): NoteDao
@@ -14,6 +15,7 @@ abstract class NoteDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: NoteDatabase? = null
 
+
         fun getDatabase(context: Context): NoteDatabase {
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
@@ -21,14 +23,17 @@ abstract class NoteDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     NoteDatabase::class.java,
-                    "note_database"
+                    ROOMDB_NAME
                 ).build()
                 INSTANCE = instance
 
                 // return instance
-                instance
+                return instance
             }
         }
     }
 
 }
+
+const val ROOMDB_VERSION = 1
+const val ROOMDB_NAME = "note_database"

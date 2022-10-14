@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.noteit.homescreen.HomeScreenFragment"
+        android:name="com.example.noteit.ui.homescreen.HomeScreenFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home_screen">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.example.noteit.splashscreen.SplashScreenFragment"
+        android:name="com.example.noteit.ui.splashscreen.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen">
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/editorScreenFragment"
-        android:name="com.example.noteit.editorscreen.EditorScreenFragment"
+        android:name="com.example.noteit.ui.editorscreen.EditorScreenFragment"
         android:label="fragment_editor_screen"
         tools:layout="@layout/fragment_editor_screen">
         <action
@@ -40,23 +40,25 @@
         <action
             android:id="@+id/action_editorScreenFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/editorScreenFragment"
+            app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
         <argument
             android:name="note"
-            app:argType="com.example.noteit.model.Note" />
+            app:argType="com.example.noteit.data.Note" />
     </fragment>
     <dialog
         android:id="@+id/customDialogFragment"
-        android:name="com.example.noteit.editorscreen.customdialogfragment.CustomDialogFragment"
+        android:name="com.example.noteit.ui.editorscreen.customdialogfragment.CustomDialogFragment"
         android:label="SaveDialogFragment" />
     <fragment
         android:id="@+id/searchScreenFragment"
-        android:name="com.example.noteit.searchscreen.SearchScreenFragment"
+        android:name="com.example.noteit.ui.searchscreen.SearchScreenFragment"
         android:label="fragment_search_screen"
         tools:layout="@layout/fragment_search_screen" >
         <action
             android:id="@+id/action_searchScreenFragment_to_editorScreenFragment"
-            app:destination="@id/editorScreenFragment" />
+            app:destination="@id/editorScreenFragment"
+            app:popUpTo="@id/searchScreenFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

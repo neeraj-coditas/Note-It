@@ -1,4 +1,4 @@
-package com.example.noteit.splashscreen
+package com.example.noteit.ui.splashscreen
 
 import android.os.Bundle
 import android.os.Handler
@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.noteit.R
 
 class SplashScreenFragment : Fragment() {
@@ -25,10 +25,14 @@ class SplashScreenFragment : Fragment() {
 
         Handler(Looper.getMainLooper()).postDelayed(
             {
-                view.findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToHomeFragment())
+                findNavController().navigate(SplashScreenFragmentDirections.actionSplashScreenFragmentToHomeFragment())
             },
-            2000
+            NAVIGATION_DELAY
         )
+    }
+
+    companion object{
+        const val NAVIGATION_DELAY:Long = 2000
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.noteit.homescreen
+package com.example.noteit.ui.homescreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,14 +10,16 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteit.databinding.FragmentHomeScreenBinding
-import com.example.noteit.homescreen.adapter.HomeScreenRecyclerAdapter
-import com.example.noteit.model.Note
+import com.example.noteit.ui.homescreen.adapter.NotesRecyclerAdapter
+import com.example.noteit.data.Note
 import com.example.noteit.viewmodel.NoteViewModel
 
-class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
-    private val  viewModel: NoteViewModel by viewModels()
+class HomeScreenFragment : Fragment(), NotesRecyclerAdapter.Interaction {
+    private val viewModel: NoteViewModel by viewModels()
     private lateinit var binding: FragmentHomeScreenBinding
-    private val notesAdapter = HomeScreenRecyclerAdapter(this)
+    private val notesAdapter by lazy {
+        NotesRecyclerAdapter(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,27 +39,31 @@ class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
                 binding.fragmentHomeIv.visibility = View.GONE
                 binding.fragmentHomeTextCreateNote.visibility = View.GONE
                 notesAdapter.updateList(it)
-            }
-            else{
+            } else {
                 notesAdapter.updateList(it)
                 binding.fragmentHomeIv.visibility = View.VISIBLE
                 binding.fragmentHomeTextCreateNote.visibility = View.VISIBLE
             }
         }
 
-        binding.fragmentHomeFabBtn.setOnClickListener{
-            val emptyList = Note("","","")
-            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(emptyList))
+        binding.fragmentHomeFabBtn.setOnClickListener {
+            val emptyList = Note("", "", 0)
+            view.findNavController().navigate(
+                HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(emptyList)
+            )
         }
 
-        binding.fragmentHomeIvSearchNote.setOnClickListener{
-            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToSearchScreenFragment())
+        binding.fragmentHomeIvSearchNote.setOnClickListener {
+            view.findNavController()
+                .navigate(HomeScreenFragmentDirections.actionHomeFragmentToSearchScreenFragment())
         }
 
     }
 
+
     override fun onItemSelected(item: Note) {
-        val navDirection = HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(item)
+        val navDirection =
+            HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(item)
         findNavController().navigate(navDirection)
     }
 
