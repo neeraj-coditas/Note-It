@@ -8,43 +8,63 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteit.databinding.FragmentHomeScreenBinding
 import com.example.noteit.homescreen.adapter.HomeScreenRecyclerAdapter
-import com.example.noteit.homescreen.viewmodel.HomeScreenViewModel
+import com.example.noteit.viewmodel.NoteViewModel
+import com.example.noteit.model.Note
 
-class HomeScreenFragment : Fragment() {
-    private val vm : HomeScreenViewModel by activityViewModels()
-    private lateinit var binding : FragmentHomeScreenBinding
+class HomeScreenFragment : Fragment(), HomeScreenRecyclerAdapter.Interaction {
+    private val  viewModel: NoteViewModel by viewModels()
+    private lateinit var binding: FragmentHomeScreenBinding
+    private val notesAdapter = HomeScreenRecyclerAdapter(this)
 
-    // Inflate the layout for this fragment
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         binding = FragmentHomeScreenBinding.inflate(layoutInflater)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val isEmpty = vm.notesObjects.isEmpty()
-        if(!isEmpty){
-            binding.fragmentHomeIv.visibility = View.GONE
-            binding.fragmentHomeTvCreateNote.visibility = View.GONE
+        binding.fragmentHomeScreenRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.fragmentHomeScreenRv.adapter = notesAdapter
 
-            binding.notesList.layoutManager = LinearLayoutManager(requireContext())
-            binding.notesList.adapter = HomeScreenRecyclerAdapter(vm.notesObjects)
+        viewModel.allNotes.observe(requireActivity()) {
+            if (it.isNotEmpty()) {
+                binding.fragmentHomeIv.visibility = View.GONE
+                binding.fragmentHomeTextCreateNote.visibility = View.GONE
+                notesAdapter.updateList(it)
+            }
+            else{
+                notesAdapter.updateList(it)
+                binding.fragmentHomeIv.visibility = View.VISIBLE
+                binding.fragmentHomeTextCreateNote.visibility = View.VISIBLE
+            }
         }
+
+        binding.fragmentHomeFabBtn.setOnClickListener{
+            val emptyList = Note("","","")
+            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(emptyList))
+        }
+
+        binding.fragmentHomeIvSearchNote.setOnClickListener{
+            view.findNavController().navigate(HomeScreenFragmentDirections.actionHomeFragmentToSearchScreenFragment())
+        }
+
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
+    override fun onItemSelected(item: Note) {
+        val navDirection = HomeScreenFragmentDirections.actionHomeFragmentToEditorScreenFragment(item)
+        findNavController().navigate(navDirection)
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
+    override fun onClickDelete(item: Note) {
+        viewModel.deleteNote(item)
     }
+
 }
