@@ -13,7 +13,7 @@ class NotesRecyclerAdapter(private val interaction: Interaction) :
     RecyclerView.Adapter<NotesRecyclerAdapter.NotesViewHolder>() {
 
     private val allNotes = ArrayList<Note>()
-    private var count = -1
+    private var selectedNotePosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val binding =
@@ -39,14 +39,23 @@ class NotesRecyclerAdapter(private val interaction: Interaction) :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Note) {
-            binding.notesDataClass = item
+            binding.run {
+                notesDataClass = item
+                viewUnitTvTitle.visibility = View.VISIBLE
+                singleNoteIvDelete.visibility = View.GONE
+                singleNote.setBackgroundResource(R.drawable.single_note_shape)
+            }
+
             assignColor()
+
             itemView.setOnClickListener {
                 interaction.onItemSelected(item)
             }
 
             itemView.setOnLongClickListener {
-                if (count < 0) {
+                if (selectedNotePosition < 0) {
+                    interaction.onItemDeselect()
+                    selectedNotePosition = adapterPosition
                     binding.apply {
                         viewUnitTvTitle.visibility = View.INVISIBLE
                         singleNoteIvDelete.visibility = View.VISIBLE
@@ -57,10 +66,9 @@ class NotesRecyclerAdapter(private val interaction: Interaction) :
                             singleNote.setBackgroundResource(R.drawable.single_note_shape)
                             singleNoteIvDelete.visibility = View.GONE
                             viewUnitTvTitle.visibility = View.VISIBLE
-                            count--
+                            selectedNotePosition = -1
                         }
                     }
-
                 } else {
                     Toast.makeText(binding.root.context, "Not Allowed", Toast.LENGTH_SHORT).show()
                 }
@@ -76,9 +84,15 @@ class NotesRecyclerAdapter(private val interaction: Interaction) :
         }
     }
 
+    fun deselectItem(){
+        notifyItemChanged(selectedNotePosition)
+        selectedNotePosition = -1
+    }
+
     interface Interaction {
         fun onItemSelected(item: Note)
         fun onClickDelete(item: Note)
+        fun onItemDeselect()
     }
 
 }

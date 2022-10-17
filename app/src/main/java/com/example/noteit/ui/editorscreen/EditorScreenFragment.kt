@@ -17,7 +17,6 @@ import com.example.noteit.viewmodel.NoteViewModel
 class EditorScreenFragment : Fragment() {
     private val viewModel: NoteViewModel by viewModels()
     private lateinit var binding: FragmentEditorScreenBinding
-    private lateinit var dialogInstance: CustomDialogFragment
     private lateinit var safeArgs: EditorScreenFragmentArgs
     private var noteId = 0
     private val noteTime: Long by lazy {
@@ -60,13 +59,13 @@ class EditorScreenFragment : Fragment() {
     }
 
     private fun saveNote() {
-        dialogInstance = CustomDialogFragment.newInstance(
+        val dialogInstance = CustomDialogFragment.newInstance(
             SAVE_DIALOG_MESSAGE,
             SAVE_DIALOG_POSITIVE_BUTTON,
             SAVE_DIALOG_NEGATIVE_BUTTON
         )
 
-        showDialog()
+        showDialog(dialogInstance)
 
         requireActivity().supportFragmentManager
             .setFragmentResultListener(REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
@@ -82,13 +81,11 @@ class EditorScreenFragment : Fragment() {
                                     noteTime
                                 )
                             )
-                            Toast.makeText(context, "Note Saved!", Toast.LENGTH_SHORT).show()
+                            makeToast("Note Saved!")
                             findNavController().navigate(EditorScreenFragmentDirections.actionEditorScreenFragmentToHomeFragment())
                         } else {
-                            Toast.makeText(context, "Please Enter a Title", Toast.LENGTH_SHORT)
-                                .show()
+                            makeToast("Please Enter a Title")
                         }
-                        dialogInstance.dismiss()
 
                     } else {
                         if ((binding.fragmentEditorTextTitle.text.toString().isNotEmpty())) {
@@ -98,17 +95,13 @@ class EditorScreenFragment : Fragment() {
                             note.timeStamp = noteTime
                             viewModel.updateNote(note)
                             makeToast("Note Updated!")
-                        }
-                        else
-                        {
+                        } else {
                             makeToast("Please Enter a Title")
                         }
-                        dialogInstance.dismiss()
-                    }
-                } else {
-                    dialogInstance.dismiss()
-                }
 
+                    }
+                }
+                dialogInstance.dismiss()
             }
 
     }
@@ -126,13 +119,13 @@ class EditorScreenFragment : Fragment() {
             note.title != currentTitle || note.description != currentDescription
 
         if (isDataNotEmpty && hasDataChanged) {
-            dialogInstance = CustomDialogFragment.newInstance(
+            val dialogInstance = CustomDialogFragment.newInstance(
                 DISCARD_DIALOG_MESSAGE,
                 DISCARD_DIALOG_POSITIVE_BUTTON,
                 DISCARD_DIALOG_NEGATIVE_BUTTON
             )
 
-            showDialog()
+            showDialog(dialogInstance)
 
             requireActivity().supportFragmentManager
                 .setFragmentResultListener(REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
@@ -180,11 +173,11 @@ class EditorScreenFragment : Fragment() {
         }
     }
 
-    private fun showDialog() {
+    private fun showDialog(dialogInstance: CustomDialogFragment) {
         dialogInstance.show(childFragmentManager, EditorScreenFragment::class.java.simpleName)
     }
 
-    private fun makeToast(toastMessage : String){
+    private fun makeToast(toastMessage: String) {
         Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
     }
 
@@ -197,7 +190,7 @@ class EditorScreenFragment : Fragment() {
         const val SAVE_DIALOG_MESSAGE = "Save Note ?"
         const val SAVE_DIALOG_POSITIVE_BUTTON = "Save"
         const val SAVE_DIALOG_NEGATIVE_BUTTON = "Discard"
-        const val DISCARD_DIALOG_MESSAGE = "Are you sure you want to discard your changes"
+        const val DISCARD_DIALOG_MESSAGE = "Are you sure you want to discard your changes ?"
         const val DISCARD_DIALOG_POSITIVE_BUTTON = "Keep"
         const val DISCARD_DIALOG_NEGATIVE_BUTTON = "Discard"
     }

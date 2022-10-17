@@ -7,8 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.noteit.data.Note
 import com.example.noteit.db.NoteDatabase
 import com.example.noteit.db.NoteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -30,9 +33,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateNote(note: Note) {
-        viewModelScope.launch(Dispatchers.IO) {
-            noteRepository.update(note)
-        }
+        noteRepository.update(note)
     }
 
     fun searchDatabase(searchQuery: String): LiveData<List<Note>> =

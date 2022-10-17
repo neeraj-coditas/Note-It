@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.noteit.data.Note
+import javax.inject.Inject
 
 @Database(entities = [Note::class], version = ROOMDB_VERSION, exportSchema = false)
-abstract class NoteDatabase : RoomDatabase() {
+abstract class NoteDatabase constructor(): RoomDatabase() {
 
     abstract fun getNoteDao(): NoteDao
 

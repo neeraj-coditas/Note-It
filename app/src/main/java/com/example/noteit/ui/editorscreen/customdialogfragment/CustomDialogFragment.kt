@@ -2,6 +2,7 @@ package com.example.noteit.ui.editorscreen.customdialogfragment
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,6 @@ class CustomDialogFragment : DialogFragment() {
     private var alertMessage : String? = null
     private var positiveButtonText: String? = null
     private var negativeButtonText: String? = null
-
     private lateinit var binding: FragmentCustomDialogBinding
 
     override fun onStart() {
@@ -55,6 +55,7 @@ class CustomDialogFragment : DialogFragment() {
             fragmentCustomDialogBtnPositive.text = positiveButtonText
             fragmentCustomDialogBtnNegative.text = negativeButtonText
 
+
             fragmentCustomDialogBtnPositive.setOnClickListener {
                 val result = true
                 requireActivity().supportFragmentManager.setFragmentResult(
@@ -84,7 +85,7 @@ class CustomDialogFragment : DialogFragment() {
 
             val fragment = CustomDialogFragment()
 
-            fragment.arguments?.apply {
+            fragment.arguments = Bundle().apply {
                 putString(ALERT_MSG_BUNDLE_KEY, alertMessage)
                 putString(POSITIVE_BTN_TEXT_BUNDLE_KEY, positiveBtntext)
                 putString(NEGATIVE_BTN_TEXT_BUNDLE_KEY, negativeBtnText)

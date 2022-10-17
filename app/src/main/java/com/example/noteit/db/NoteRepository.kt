@@ -2,6 +2,7 @@ package com.example.noteit.db
 
 import androidx.lifecycle.LiveData
 import com.example.noteit.data.Note
+import javax.inject.Inject
 
 class NoteRepository(private val noteDao: NoteDao) {
 
@@ -17,7 +18,7 @@ class NoteRepository(private val noteDao: NoteDao) {
         noteDao.delete(note)
     }
 
-    suspend fun update(note: Note) {
+     fun update(note: Note) {
         noteDao.update(note)
     }
 

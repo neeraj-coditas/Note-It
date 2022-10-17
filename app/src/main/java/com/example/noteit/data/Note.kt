@@ -3,6 +3,7 @@ package com.example.noteit.data
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
@@ -16,6 +17,7 @@ class Note(
 
     @PrimaryKey(autoGenerate = true)
     var id = 0
+
 }
 
 const val TABLE_NAME = "notes_table"
