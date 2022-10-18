@@ -69,8 +69,8 @@ class EditorScreenFragment : Fragment() {
 
         requireActivity().supportFragmentManager
             .setFragmentResultListener(REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
-
                 val result = bundle.getBoolean(BUNDLE_KEY)
+
                 if (result) {
                     if (noteId == 0) {
                         if (binding.fragmentEditorTextTitle.text.toString().isNotEmpty()) {

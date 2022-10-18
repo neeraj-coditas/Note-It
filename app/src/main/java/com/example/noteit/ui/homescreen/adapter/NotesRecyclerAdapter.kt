@@ -25,13 +25,13 @@ class NotesRecyclerAdapter(private val interaction: Interaction) :
         holder.bind(allNotes[position])
     }
 
+    override fun getItemCount(): Int = allNotes.size
+
     fun updateList(newList: List<Note>) {
         allNotes.clear()
         allNotes.addAll(newList)
         notifyItemRangeChanged(0, newList.size + 1)
     }
-
-    override fun getItemCount(): Int = allNotes.size
 
     inner class NotesViewHolder(
         private val binding: SingleNoteViewBinding,
@@ -54,7 +54,7 @@ class NotesRecyclerAdapter(private val interaction: Interaction) :
 
             itemView.setOnLongClickListener {
                 if (selectedNotePosition < 0) {
-                    interaction.onItemDeselect()
+                    interaction.onItemSelected()
                     selectedNotePosition = adapterPosition
                     binding.apply {
                         viewUnitTvTitle.visibility = View.INVISIBLE
@@ -92,7 +92,7 @@ class NotesRecyclerAdapter(private val interaction: Interaction) :
     interface Interaction {
         fun onItemSelected(item: Note)
         fun onClickDelete(item: Note)
-        fun onItemDeselect()
+        fun onItemSelected()
     }
 
 }

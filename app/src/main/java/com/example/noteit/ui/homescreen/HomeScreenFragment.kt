@@ -44,11 +44,14 @@ class HomeScreenFragment : Fragment(), NotesRecyclerAdapter.Interaction {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRV()
         subscribeBackpress()
         subscribeFabClickListener()
         subscribeSearchClickListener()
+        subscribeInfoClickListener()
+    }
+
+    private fun subscribeInfoClickListener() {
 
     }
 
@@ -101,7 +104,7 @@ class HomeScreenFragment : Fragment(), NotesRecyclerAdapter.Interaction {
         viewModel.deleteNote(item)
     }
 
-    override fun onItemDeselect() {
+    override fun onItemSelected() {
         isItemSelected = true
     }
 

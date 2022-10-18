@@ -33,7 +33,9 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateNote(note: Note) {
-        noteRepository.update(note)
+        viewModelScope.launch(Dispatchers.IO) {
+            noteRepository.update(note)
+        }
     }
 
     fun searchDatabase(searchQuery: String): LiveData<List<Note>> =
