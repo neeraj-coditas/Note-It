@@ -11,9 +11,12 @@ import com.example.noteit.data.Note
 
 class NotesRecyclerAdapter(private val interaction: Interaction) :
     RecyclerView.Adapter<NotesRecyclerAdapter.NotesViewHolder>() {
-
-    private val allNotes = ArrayList<Note>()
+    private val allNotes by lazy {
+        ArrayList<Note>()
+    }
     private var selectedNotePosition = -1
+    private var colorCount = 0
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val binding =
@@ -77,10 +80,17 @@ class NotesRecyclerAdapter(private val interaction: Interaction) :
         }
 
         private fun assignColor() {
-            val colorArray = binding.root.context.resources.getIntArray(R.array.rainbow)
-            val random = colorArray.random()
-            val background = binding.singleNote.background
-            background.setTint(random)
+            if(colorCount<6) {
+                val colorArray = binding.root.context.resources.getIntArray(R.array.rainbow)
+                val random = colorArray[colorCount]
+                val background = binding.singleNote.background
+                background.setTint(random)
+                colorCount++
+            }
+            else{
+                colorCount = 0
+                assignColor()
+            }
         }
     }
 
